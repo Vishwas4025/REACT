@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+/day01/node_modules
+/day02/node_modules
+/day03/node_modules
 /.pnp
 .pnp.js
 
