@@ -5,6 +5,8 @@
 /day01/node_modules
 /day02/node_modules
 /day03/node_modules
+/pagination/backend/node_modules
+/pagination/frontend/node_modules
 /.pnp
 .pnp.js
 

@@ -68,6 +68,10 @@ button {
   transition: background-color 0.2s ease;
 }
 
+.remove-button:hover {
+  background-color: #c30b0b;
+}
+
 button:hover {
   background-color: #0056b3;
 }

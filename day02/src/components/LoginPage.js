@@ -30,11 +30,11 @@ const LoginPage=()=>{
     }
 
     return(
-        <div>
-            <h2>Login</h2>
-            <form>
-                <div>
-                    <label>username : </label>
+        <div className="register-page">
+            <form className="form">
+                <h2>Login</h2>
+                <div className="form-group">
+                    {/* <label>username : </label> */}
                     <input
                         type="text"
                         name="username"
@@ -44,8 +44,8 @@ const LoginPage=()=>{
                     />
                 </div>
 
-                <div>
-                    <label>password : </label>
+                <div className="form-group">
+                    {/* <label>password : </label> */}
                     <input
                         type="text"
                         name="password"
@@ -55,8 +55,8 @@ const LoginPage=()=>{
                     />
                 </div>
 
-                <div>
-                    <label>role : </label>
+                <div className="form-group">
+                    {/* <label>role : </label> */}
                     <select
                         name="role"
                         value={user.role}
@@ -69,7 +69,7 @@ const LoginPage=()=>{
                         
                 </div>
 
-                <button onClick={handleClick}>Log in</button>
+                <button className="btn" onClick={handleClick}>Log in</button>
                 
             </form>
         </div>

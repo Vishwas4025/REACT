@@ -132,7 +132,8 @@ const ShoppingCart=()=>{
                 else{
                     const updProduct = {...exi, count:exi.count+1}
                     const newCart = state.filter((p)=>p.id!==product.id);
-                    return [...newCart, updProduct].sort((a,b)=> a.id-b.id);
+                    // newCart = newCart.sort((a,b)=> a.id-b.id);
+                    return [...newCart, updProduct];
                 }
             case 'REMOVE_PRODUCT':
                 const prodToRemove = state.find((p)=>p.id===product.id);
@@ -140,7 +141,8 @@ const ShoppingCart=()=>{
                     return state
                 }
                 const newCart = state.filter((p)=>p.id!==product.id);
-                return [...newCart].sort((a,b)=> a.id-b.id);
+                // newCart = newCart.sort((a,b)=> a.id-b.id);
+                return [...newCart];
             default:
                 return state;
         }
@@ -167,37 +169,39 @@ const ShoppingCart=()=>{
 
 
     return(
-        <div className="container">
-            <div className="products">
-                <h2>PRODUCTS</h2>
-                {Products.map((p) => {
-                    return (
-                        <div key={p.id} className="product">
-                            <h3>{p.name}</h3>
-                            <p>{p.description}</p>
-                            <h3>Price : {p.price}</h3>
-                            <button onClick={()=>handleAddProduct(p)}>Add to cart</button>
-                        </div>
-                    )
-                })}
-            </div>
-            <div className="cart">
-                <h2>CART</h2>
-                {state.length===0 ? (<p>no items to display</p>) : 
-                    (<>
-                        {state.map((p)=>{
-                            return(
-                                <div key={p.id} className="cart-item">
-                                    <h3>{p.name}</h3>
-                                    <p>count : {p.count}</p>
-                                    <button className="remove-button" onClick={()=>handleRemoveProduct(p)}>
-                                        remove item                                        </button>
-                                </div>
-                            )
-                        })}
-                        <div className="total">Totalcost : {handleTotalcost()}</div>
-                    </>)
-                }
+        <div>
+            <div className="container">
+                <div className="products">
+                    <h2>PRODUCTS</h2>
+                    {Products.map((p) => {
+                        return (
+                            <div key={p.id} className="product">
+                                <h3>{p.name}</h3>
+                                <p>{p.description}</p>
+                                <h3>Price : {p.price}</h3>
+                                <button onClick={()=>handleAddProduct(p)}>Add to cart</button>
+                            </div>
+                        )
+                    })}
+                </div>
+                <div className="cart">
+                    <h2>CART</h2>
+                    {state.length===0 ? (<p>no items to display</p>) : 
+                        (<>
+                            {state.map((p)=>{
+                                return(
+                                    <div key={p.id} className="cart-item">
+                                        <h3>{p.name}</h3>
+                                        <p>count : {p.count}</p>
+                                        <button className="remove-button" onClick={()=>handleRemoveProduct(p)}>
+                                            remove item                                        </button>
+                                    </div>
+                                )
+                            })}
+                            <div className="total">Totalcost : {handleTotalcost()}</div>
+                        </>)
+                    }
+                </div>
             </div>
         </div>
     )

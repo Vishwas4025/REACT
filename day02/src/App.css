@@ -1,38 +1,165 @@
-.App {
-  text-align: center;
+/* General layout */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #f9f9f9;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app-container {
+  padding: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.page {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.register-page {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #e4e3e3;
+  padding: 20px 20px;
+  height: 30px;
+  display: flex;
+}
+
+.nav-link {
+  align-items: center;
+  color: #2b2b2b;
+  font-weight: bold;
+  font-size: large;
+  text-decoration: none;
+  margin-right: 30px;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+/* Form */
+.form {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  width: 400px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  height: 50px;
+  padding: 8px;
+  box-sizing: border-box;
+  margin-bottom: 3px;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Cards */
+.card {
+  background-color: #f4f4f4;
+  padding: 15px;
+  border-left: 5px solid gray;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.card.pending {
+  border-left-color: orange;
+}
+
+.card.accepted {
+  border-left-color: green;
+}
+
+.card.rejected {
+  border-left-color: red;
+}
+
+/* Improved Admin Card Layout */
+.employee-card {
+  position: relative;
+  padding: 20px;
+  background: #fff;
+  border-left: 2px solid gray;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 7px;
+  font-size: 0.85rem;
   color: white;
+  text-transform: capitalize;
 }
 
-.App-link {
-  color: #61dafb;
+.status-badge.pending {
+  background-color: orange;
+}
+.status-badge.accepted {
+  background-color: green;
+}
+.status-badge.rejected {
+  background-color: red;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.card-body {
+  padding-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+}
+
+.card-row {
+  font-size: 0.95rem;
 }
