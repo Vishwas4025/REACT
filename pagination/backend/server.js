@@ -27,6 +27,54 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
+// Search products by name (case-insensitive, partial match)
+app.get('/api/products/search', async (req, res) => {
+  const nameQuery = req.query.name || '';
+
+  // try {
+  //   const products = await Product.find({
+  //     name: { $regex: nameQuery, $options: 'i' },
+  //   });
+
+  //   res.json(products);
+  // } catch (err) {
+  //   res.status(500).json({ error: 'Search failed' });
+  // }
+
+  try {
+    const regex = new RegExp(nameQuery, 'i'); // case-insensitive match
+    const products = await Product.find({ name: { $regex: regex } });
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ error: 'Search failed' });
+  }
+
+});
+
+// Update a product
+app.put('/api/products/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
+    res.json(updatedProduct);
+  } catch (err) {
+    res.status(500).json({ error: 'Update failed' });
+  }
+});
+
+// Delete a product
+app.delete('/api/products/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Product.findByIdAndDelete(id);
+    res.json({ message: 'Product deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Delete failed' });
+  }
+});
+
+
+
 // Connect to MongoDB and start server
 const PORT = process.env.PORT;
 
