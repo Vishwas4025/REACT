@@ -201,13 +201,12 @@
 
 
 
-
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-  TablePagination, Typography, Container, TextField, Box, Button
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  Paper, TablePagination, Typography, Container, TextField, Box,
+  Button
 } from '@mui/material';
 
 const ProductTable = () => {
@@ -217,10 +216,9 @@ const ProductTable = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [editIndex, setEditIndex] = useState(null);
-  const [editedProduct, setEditedProduct] = useState({});
+  const [editRowId, setEditRowId] = useState(null);
+  const [editValues, setEditValues] = useState({});
 
-  // Fetch products
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -237,32 +235,44 @@ const ProductTable = () => {
     fetchData();
   }, [search]);
 
-  // Handle edit field change
-  const handleInputChange = (e) => {
-    setEditedProduct({ ...editedProduct, [e.target.name]: e.target.value });
+  const enterEditMode = (product) => {
+    setEditRowId(product._id);
+    setEditValues({ ...product });
   };
 
-  // Save updated product
+  const handleEditChange = (field, value) => {
+    setEditValues((prev) => ({
+      ...prev,
+      [field]:
+        field === 'price' ? parseFloat(value)
+        : field === 'inStock' ? value.toLowerCase() === 'yes'
+        : value
+    }));
+  };
+
   const handleSave = async (id) => {
     try {
-      const res = await axios.put(`${baseURL}/api/products/${id}`, editedProduct);
-      const updatedList = [...products];
-      updatedList[editIndex] = res.data;
-      setProducts(updatedList);
-      setEditIndex(null);
-      setEditedProduct({});
+      const updatedData = {
+        ...editValues,
+        price: parseFloat(editValues.price)
+      };
+      const res = await axios.put(`${baseURL}/api/products/${id}`, updatedData);
+      const updatedProducts = products.map((p) =>
+        p._id === id ? res.data : p
+      );
+      setProducts(updatedProducts);
+      setEditRowId(null);
     } catch (err) {
-      console.error('Update failed', err);
+      console.error('Update failed:', err);
     }
   };
 
-  // Delete product
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${baseURL}/api/products/${id}`);
       setProducts(products.filter((p) => p._id !== id));
     } catch (err) {
-      console.error('Delete failed', err);
+      console.error('Delete failed:', err);
     }
   };
 
@@ -297,41 +307,42 @@ const ProductTable = () => {
             <TableBody>
               {products
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((product, i) => (
-                  <TableRow key={product._id}>
-                    {editIndex === i ? (
+                .map((product) => (
+                  <TableRow key={product._id} data-testid="product-row">
+                    {editRowId === product._id ? (
                       <>
                         <TableCell>
                           <TextField
-                            name="name"
-                            value={editedProduct.name}
-                            onChange={handleInputChange}
+                            value={editValues.name}
+                            onChange={(e) => handleEditChange('name', e.target.value)}
                           />
                         </TableCell>
                         <TableCell>
                           <TextField
-                            name="price"
                             type="number"
-                            value={editedProduct.price}
-                            onChange={handleInputChange}
+                            value={editValues.price}
+                            onChange={(e) => handleEditChange('price', e.target.value)}
                           />
                         </TableCell>
                         <TableCell>
                           <TextField
-                            name="category"
-                            value={editedProduct.category}
-                            onChange={handleInputChange}
+                            value={editValues.category}
+                            onChange={(e) => handleEditChange('category', e.target.value)}
                           />
                         </TableCell>
                         <TableCell>
                           <TextField
-                            name="inStock"
-                            value={editedProduct.inStock}
-                            onChange={handleInputChange}
+                            value={editValues.inStock ? 'Yes' : 'No'}
+                            onChange={(e) => handleEditChange('inStock', e.target.value)}
                           />
                         </TableCell>
                         <TableCell>
-                          <Button variant="contained" color="success" onClick={() => handleSave(product._id)}>
+                          <Button
+                            onClick={() => handleSave(product._id)}
+                            variant="contained"
+                            color="success"
+                            size="small"
+                          >
                             Submit
                           </Button>
                         </TableCell>
@@ -339,27 +350,23 @@ const ProductTable = () => {
                     ) : (
                       <>
                         <TableCell>{product.name}</TableCell>
-                        <TableCell>${product.price}</TableCell>
+                        <TableCell>${product.price.toFixed(2)}</TableCell>
                         <TableCell>{product.category}</TableCell>
                         <TableCell>{product.inStock ? 'Yes' : 'No'}</TableCell>
                         <TableCell>
                           <Button
+                            onClick={() => enterEditMode(product)}
                             variant="outlined"
-                            color="primary"
                             size="small"
                             sx={{ mr: 1 }}
-                            onClick={() => {
-                              setEditIndex(i);
-                              setEditedProduct(product);
-                            }}
                           >
                             Edit
                           </Button>
                           <Button
+                            onClick={() => handleDelete(product._id)}
                             variant="outlined"
                             color="error"
                             size="small"
-                            onClick={() => handleDelete(product._id)}
                           >
                             Delete
                           </Button>
@@ -367,7 +374,7 @@ const ProductTable = () => {
                       </>
                     )}
                   </TableRow>
-                ))}
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -378,7 +385,7 @@ const ProductTable = () => {
           page={page}
           onPageChange={(e, newPage) => setPage(newPage)}
           rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={e => {
+          onRowsPerPageChange={(e) => {
             setRowsPerPage(parseInt(e.target.value, 10));
             setPage(0);
           }}

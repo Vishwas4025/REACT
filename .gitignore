@@ -7,6 +7,8 @@
 /day03/node_modules
 /pagination/backend/node_modules
 /pagination/frontend/node_modules
+/profile manager/backend/node_modules
+/profile manager/frontend/node_modules
 /.pnp
 .pnp.js
 
